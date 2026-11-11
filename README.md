@@ -6,7 +6,7 @@
 The page is paper, ink and one blue. Donnie's own words carry it.
 
 - **In his own words**: messages, commit messages and code comments that Donnie wrote, in date
-  order, with what his colleagues said about him. Every entry is a quotation. Nobody rewrites one.
+  order. Every entry is a quotation. Nobody rewrites one.
 - **Memory wall**: anyone can share a story, with an optional photo.
 - **Light a candle**: a shared counter.
 - **A Celebration of Life**: the service details, the program and the Rest in Power mural.
