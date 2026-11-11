@@ -825,10 +825,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   background: none;
   cursor: zoom-in;
   box-shadow: 0 40px 80px -30px rgb(30 12 50 / 75%), 0 0 0 1px rgb(255 255 255 / 25%);
-  rotate: -1.5deg;
-  transition: rotate .6s var(--ease-out), scale .6s var(--ease-out);
 }
-.rip__mural-button:hover { rotate: 0deg; scale: 1.015; }
 .rip__mural-button img { border-radius: 10px; width: 100%; }
 .rip__zoom {
   position: absolute;
