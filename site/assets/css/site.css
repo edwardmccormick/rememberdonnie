@@ -242,6 +242,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   text-decoration: none;
   color: rgb(247 240 227 / 72%);
   padding: .4rem 0;
+  white-space: nowrap;
   transition: color .2s;
 }
 .nav__links a::after {
@@ -256,7 +257,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 .nav__links a.is-active { color: var(--cream-50); }
 .nav__links a.is-active::after { transform: scaleX(1); }
 .nav .btn { margin-left: auto; }
-@media (max-width: 860px) {
+@media (max-width: 980px) {
   .nav__links { display: none; }
 }
 
@@ -808,14 +809,12 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 
 .rip__grid {
   display: grid;
-  grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
-  gap: clamp(2rem, 6vw, 5rem);
-  align-items: center;
+  justify-items: center;
   position: relative;
   z-index: 1;
 }
 
-.rip__mural { margin: 0; }
+.rip__mural { margin: 0; width: min(100%, 560px); }
 .rip__mural-button {
   position: relative;
   display: block;
@@ -850,35 +849,6 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 .rip__mural-button:hover .rip__zoom,
 .rip__mural-button:focus-visible .rip__zoom { opacity: 1; }
 
-.rip__card {
-  padding: clamp(1.8rem, 4vw, 3rem);
-  border-radius: 24px;
-  background: rgb(10 21 48 / 55%);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgb(255 255 255 / 16%);
-  color: var(--cream-100);
-  box-shadow: 0 30px 70px -40px rgb(10 21 48 / 80%);
-}
-.rip__title {
-  font-family: var(--font-script);
-  font-weight: 400;
-  font-size: clamp(3.6rem, 2.6rem + 4.4vw, 6.2rem);
-  line-height: .95;
-  color: var(--gold-300);
-  margin: -.3rem 0 1.2rem;
-  text-shadow: 0 2px 30px rgb(255 200 120 / 35%);
-}
-.rip__card p { color: rgb(247 240 227 / 90%); }
-.rip__quote {
-  margin: 1.4rem 0 0 !important;
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
-  line-height: 1.25;
-  color: var(--cream-50) !important;
-}
-
 .skyline {
   position: relative;
   z-index: 0;
@@ -891,11 +861,6 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
 }
 .skyline__city { fill: var(--navy-900); }
 
-@media (max-width: 900px) {
-  .rip__grid { grid-template-columns: 1fr; justify-items: center; }
-  .rip__mural { width: min(100%, 460px); }
-  .rip__card { text-align: center; max-width: 560px; }
-}
 
 /* ------------------------------------------------------------------ candles */
 
