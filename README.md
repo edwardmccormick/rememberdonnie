@@ -3,13 +3,13 @@
 **[rememberdonnie.com](https://rememberdonnie.com)** — a memorial for Donnie Edward McNeal Jr., "DJ"
 (January 17, 1981 – October 13, 2026). *Great Engineer. Better person.*
 
-The page moves through one day. Dawn in the hero, taken from his Celebration of Life program. Warm
-daylight for the memory wall. An LA sunset for the Rest in Power mural. Night for the candles.
+The page is paper, ink and one blue. Donnie's own words carry it.
 
+- **In his own words**: messages, commit messages and code comments that Donnie wrote, in date
+  order, with what his colleagues said about him. Every entry is a quotation. Nobody rewrites one.
 - **Memory wall**: anyone can share a story, with an optional photo.
-- **Light a candle**: a shared counter, shown as a field of flickering candles.
-- **Rest in Power**: the mural, full size in a lightbox.
-- **A Celebration of Life**: the service details and the program.
+- **Light a candle**: a shared counter.
+- **A Celebration of Life**: the service details, the program and the Rest in Power mural.
 
 No framework and no front-end build step. It's plain HTML, CSS and JavaScript, so it keeps working for years without upkeep.
 
@@ -35,6 +35,7 @@ table has point-in-time recovery: these memories matter.
 | `api/` | The API. `src/app.js` is the logic, `src/aws.js` the AWS adapters, `src/rules.js` validation and moderation |
 | `scripts/dev-server.mjs` | Local preview that runs the real API logic against in-memory storage |
 | `scripts/deploy.sh` | Test, bundle and publish the API; upload the site; invalidate CloudFront |
+| `words/words.json` | The quotations for *In his own words*. `scripts/build-words.mjs` renders them into `site/index.html` |
 | `scripts/build-images.py` | Generates the portrait, mural, program, social card and icon from `source-images/` |
 
 ## Moderation
@@ -122,6 +123,10 @@ that format as well as the classic `repo:owner/repo:…` one.
 
 - **His story**: the `#story` section of `site/index.html`. If the family shares an obituary or more
   about his life, this is where it goes.
+- **His words**: add an entry to `words/words.json` (`date`, `by`, `where`, `text`), run
+  `node scripts/build-words.mjs`, and commit both files. Copy the text exactly, typos included. Get
+  consent before you publish another person's words, a child's name or a customer's name. Set
+  `"hold": true` to keep an entry off the page.
 - **Images**: put new originals in `source-images/`, adjust `scripts/build-images.py`, run it, and commit the output.
 
 ## Cost
