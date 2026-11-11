@@ -602,7 +602,7 @@ function initShare() {
 
       const live = result.status === 'approved' && result.memory;
       $('[data-done-message]').textContent = live
-        ? 'Your memory of DJ is on the wall now. Thank you for helping keep him close.'
+        ? 'Your memory of Donnie is on the wall now. Thank you for helping keep him close.'
         : 'Your memory has been received. It will appear on the wall once it’s been reviewed. Thank you for helping keep him close.';
       form.hidden = true;
       done.hidden = false;
@@ -642,8 +642,8 @@ function initCandles() {
   };
 
   const summary = () => {
-    if (count === 0) return 'Be the first to light a candle for DJ.';
-    return count === 1 ? '1 candle is burning for DJ.' : `${count.toLocaleString('en-US')} candles are burning for DJ.`;
+    if (count === 0) return 'Be the first to light a candle for Donnie.';
+    return count === 1 ? '1 candle is burning for Donnie.' : `${count.toLocaleString('en-US')} candles are burning for Donnie.`;
   };
 
   function render() {
@@ -678,7 +678,7 @@ function initCandles() {
       button.textContent = 'Light another candle';
     } catch (err) {
       if (err.status === 429) {
-        status.textContent = 'Your candles are burning bright for DJ. Thank you.';
+        status.textContent = 'Your candles are burning bright for Donnie. Thank you.';
       } else {
         toast('Your candle couldn’t be lit just now. Please try again.');
       }
@@ -718,7 +718,7 @@ function initSharePage() {
     button.addEventListener('click', async () => {
       const data = {
         title: 'Remembering Donnie “DJ” McNeal Jr.',
-        text: 'Great Engineer. Better person. Share a memory of DJ or light a candle.',
+        text: 'Great Engineer. Better person. Share a memory of Donnie or light a candle.',
         url: `${location.origin}/`,
       };
       if (navigator.share) {
@@ -746,4 +746,4 @@ for (const init of [initNav, initReveal, initMotes, initLightbox, initDialogs, i
 }
 
 console.log('%cGreat engineer. Better person.', 'font: italic 600 22px Georgia, serif; color: #c9a24a; padding: 6px 0;');
-console.log('%cRest easy, DJ. — https://github.com/edwardmccormick/rememberdonnie', 'font: 13px Georgia, serif; color: #6b7390;');
+console.log('%cRest easy, Donnie. — https://github.com/edwardmccormick/rememberdonnie', 'font: 13px Georgia, serif; color: #6b7390;');

@@ -134,7 +134,7 @@ export function createApp({ store, media, notifier, getSecret, config = {}, now 
     try {
       const pending = memory.status === 'pending';
       await notifier.notify(
-        asciiSubject(pending ? `Memory for DJ waiting for review (${reason})` : 'New memory shared for DJ'),
+        asciiSubject(pending ? `Memory for Donnie waiting for review (${reason})` : 'New memory shared for Donnie'),
         [
           `${memory.name}${memory.relation ? ` (${memory.relation})` : ''} shared a memory${memory.photoId ? ' with a photo' : ''}:`,
           '',

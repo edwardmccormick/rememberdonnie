@@ -69,7 +69,7 @@ export function parseMemoryInput(body, { now }) {
 
   if (!name) return { ok: false, error: 'Please add your name.' };
   if (name.length > LIMITS.name) return { ok: false, error: `Please keep your name under ${LIMITS.name} characters.` };
-  if (relation.length > LIMITS.relation) return { ok: false, error: `Please keep "how you knew DJ" under ${LIMITS.relation} characters.` };
+  if (relation.length > LIMITS.relation) return { ok: false, error: `Please keep "how you knew Donnie" under ${LIMITS.relation} characters.` };
   if (!message) return { ok: false, error: 'Please write a memory to share.' };
   if (message.length > LIMITS.message) return { ok: false, error: `Please keep your memory under ${LIMITS.message.toLocaleString('en-US')} characters.` };
 
