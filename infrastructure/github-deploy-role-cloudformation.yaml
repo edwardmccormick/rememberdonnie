@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  GitHub Actions deploy access for rememberdonnie.com. Creates a role that only
+  the main branch of the website repository can assume. It can publish to the
+  site bucket, update the API function's code and invalidate the CloudFront
+  distribution, nothing else. Deploy once, manually, in us-east-1, then set the
+  repository variables AWS_DEPLOY_ROLE_ARN (RoleArn output), SITE_BUCKET and
+  DISTRIBUTION_ID so the pipeline's deploy job runs.
+
+Parameters:
+  GitHubRepository:
+    Type: String
+    Default: edwardmccormick/rememberdonnie
+    Description: owner/repo allowed to assume the deploy role.
+  DeployBranch:
+    Type: String
+    Default: main
+  DistributionId:
+    Type: String
+    Description: The rememberdonnie CloudFront distribution ID (stack output DistributionId).
+  ApiFunctionName:
+    Type: String
+    Default: rememberdonnie-api
+  CreateOidcProvider:
+    Type: String
+    AllowedValues: ['true', 'false']
+    Default: 'false'
+    Description: Set to true only if the account does not already have the token.actions.githubusercontent.com provider.
+
+Conditions:
+  ShouldCreateOidcProvider: !Equals [!Ref CreateOidcProvider, 'true']
+
+Resources:
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Condition: ShouldCreateOidcProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+
+  WebsiteDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: rememberdonnie-website-deploy
+      Description: Assumed by GitHub Actions to publish rememberdonnie.com.
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubRepository}:ref:refs/heads/${DeployBranch}
+      Policies:
+        - PolicyName: PublishWebsite
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: s3:ListBucket
+                Resource: !Sub arn:aws:s3:::rememberdonnie-site-${AWS::AccountId}
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource: !Sub arn:aws:s3:::rememberdonnie-site-${AWS::AccountId}/*
+              - Effect: Allow
+                Action:
+                  - lambda:UpdateFunctionCode
+                  - lambda:GetFunction
+                  - lambda:GetFunctionConfiguration
+                Resource: !Sub arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${ApiFunctionName}
+              - Effect: Allow
+                Action:
+                  - cloudfront:CreateInvalidation
+                  - cloudfront:GetInvalidation
+                Resource: !Sub arn:aws:cloudfront::${AWS::AccountId}:distribution/${DistributionId}
+
+Outputs:
+  RoleArn:
+    Description: Set as the AWS_DEPLOY_ROLE_ARN repository variable.
+    Value: !GetAtt WebsiteDeployRole.Arn

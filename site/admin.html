@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Review memories · Remember Donnie</title>
+  <meta name="theme-color" content="#0e1a38">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600&family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+  <link rel="stylesheet" href="/assets/css/site.css?v=dev">
+  <script type="module" src="/assets/js/admin.js?v=dev"></script>
+</head>
+<body class="admin">
+  <header class="admin__bar">
+    <div class="admin__bar-inner">
+      <a class="nav__brand" href="/">DJ</a>
+      <span class="admin__bar-title">Memory review</span>
+      <button class="btn btn--ghost btn--ghost-light btn--small" type="button" data-sign-out hidden>Sign out</button>
+    </div>
+  </header>
+
+  <main class="container admin__main">
+    <form class="admin-login" data-login>
+      <h1 class="section-title">Review memories</h1>
+      <p>Paste the admin key to approve, hide or delete memories.</p>
+      <div class="field">
+        <label for="admin-key">Admin key</label>
+        <input id="admin-key" type="password" autocomplete="current-password" required>
+      </div>
+      <p class="form__error" role="alert" data-login-error hidden></p>
+      <button class="btn btn--navy" type="submit">Open</button>
+    </form>
+
+    <div data-dashboard hidden>
+      <div class="admin-stats">
+        <div><strong data-stat="pending">0</strong><span>Waiting</span></div>
+        <div><strong data-stat="approved">0</strong><span>On the wall</span></div>
+        <div><strong data-stat="hidden">0</strong><span>Hidden</span></div>
+        <div><strong data-stat="candles">0</strong><span>Candles</span></div>
+      </div>
+      <div class="admin-toolbar">
+        <div class="segmented" role="group" aria-label="Show">
+          <button type="button" data-view="pending" aria-pressed="true">Waiting</button>
+          <button type="button" data-view="approved" aria-pressed="false">On the wall</button>
+          <button type="button" data-view="hidden" aria-pressed="false">Hidden</button>
+          <button type="button" data-view="all" aria-pressed="false">All</button>
+        </div>
+        <button class="btn btn--ghost btn--small" type="button" data-refresh>Refresh</button>
+      </div>
+      <p class="admin-empty" data-empty hidden>Nothing here.</p>
+      <div class="admin-list" data-list aria-live="polite"></div>
+    </div>
+  </main>
+  <div class="toast" role="status" aria-live="polite" data-toast></div>
+</body>
+</html>
