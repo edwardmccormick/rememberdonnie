@@ -96,18 +96,27 @@ by `deploy.sh`, so editing the placeholder would overwrite the live API on the n
 
 ### Deploying from GitHub
 
-`.github/workflows/pipeline.yaml` tests every push and PR. Its deploy job turns itself on once these
-three repository variables exist:
+`.github/workflows/pipeline.yaml` tests every push and PR. Every push to `main` then runs
+`scripts/deploy.sh` as the `rememberdonnie-website-deploy` role, through GitHub OIDC with no
+long-lived keys. Only `main` of this repo can assume the role. It can read the site stack's outputs,
+publish to the site bucket, update the API function's code and invalidate the distribution, and
+nothing else. Infrastructure changes (`--infra`) still need to be run by hand.
 
-1. Create the deploy role. It can only touch this site's bucket, the API function and the distribution:
-   ```bash
-   aws cloudformation deploy --stack-name rememberdonnie-github-deploy \
-     --template-file infrastructure/github-deploy-role-cloudformation.yaml \
-     --capabilities CAPABILITY_NAMED_IAM \
-     --parameter-overrides DistributionId=<DistributionId output>
-   ```
-2. Set the repository variables `AWS_DEPLOY_ROLE_ARN` (the role's `RoleArn` output), `SITE_BUCKET`
-   and `DISTRIBUTION_ID` (the main stack's outputs).
+The role lives in stack `rememberdonnie-github-deploy`, and its ARN is the repository secret
+`AWS_DEPLOY_ROLE_ARN`. To recreate it:
+
+```bash
+aws cloudformation deploy --stack-name rememberdonnie-github-deploy \
+  --template-file infrastructure/github-deploy-role-cloudformation.yaml \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides DistributionId=<DistributionId output of the rememberdonnie stack>
+aws cloudformation describe-stacks --stack-name rememberdonnie-github-deploy \
+  --query "Stacks[0].Outputs[?OutputKey=='RoleArn'].OutputValue" --output text \
+  | gh secret set AWS_DEPLOY_ROLE_ARN
+```
+
+This repo emits GitHub's *immutable* OIDC subject (`repo:owner@id/repo@id:…`), so the role trusts
+that format as well as the classic `repo:owner/repo:…` one.
 
 ## Changing the content
 

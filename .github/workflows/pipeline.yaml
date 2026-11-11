@@ -49,20 +49,19 @@ jobs:
           pip install cfn-lint
           cfn-lint infrastructure/*.yaml
 
-  # Runs once the deploy role exists and these repository variables are set:
-  # AWS_DEPLOY_ROLE_ARN, SITE_BUCKET, DISTRIBUTION_ID
-  # (see infrastructure/github-deploy-role-cloudformation.yaml).
+  # Assumes the role from infrastructure/github-deploy-role-cloudformation.yaml
+  # (repository secret AWS_DEPLOY_ROLE_ARN). Bucket, distribution and function
+  # names come from the rememberdonnie stack's outputs.
   deploy:
     needs: test
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.AWS_DEPLOY_ROLE_ARN != ''
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: read
       id-token: write
-    env:
-      SITE_BUCKET: ${{ vars.SITE_BUCKET }}
-      DISTRIBUTION_ID: ${{ vars.DISTRIBUTION_ID }}
-      API_FUNCTION: rememberdonnie-api
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v5
 
@@ -75,7 +74,7 @@ jobs:
       - name: Configure AWS credentials (OIDC)
         uses: aws-actions/configure-aws-credentials@v6
         with:
-          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
           mask-aws-account-id: true
 

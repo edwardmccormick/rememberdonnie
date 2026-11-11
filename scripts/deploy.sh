@@ -6,7 +6,8 @@
 #   scripts/deploy.sh --infra    update the CloudFormation stack first
 #
 # Bucket, distribution and function names come from the stack outputs unless
-# SITE_BUCKET / DISTRIBUTION_ID / API_FUNCTION are already set (CI sets them).
+# SITE_BUCKET / DISTRIBUTION_ID / API_FUNCTION are already set. GitHub Actions
+# runs this on every push to main (see .github/workflows/pipeline.yaml).
 # To get an email for each new memory, run once with NOTIFICATION_EMAIL=you@example.com
 # and --infra; the stack remembers it after that.
 set -euo pipefail

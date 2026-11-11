@@ -1,17 +1,26 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
   GitHub Actions deploy access for rememberdonnie.com. Creates a role that only
-  the main branch of the website repository can assume. It can publish to the
-  site bucket, update the API function's code and invalidate the CloudFront
-  distribution, nothing else. Deploy once, manually, in us-east-1, then set the
-  repository variables AWS_DEPLOY_ROLE_ARN (RoleArn output), SITE_BUCKET and
-  DISTRIBUTION_ID so the pipeline's deploy job runs.
+  the main branch of the website repository can assume. It can read the site
+  stack's outputs, publish to the site bucket, update the API function's code and
+  invalidate the CloudFront distribution, nothing else. Deploy once, manually, in
+  us-east-1, then store the RoleArn output as the AWS_DEPLOY_ROLE_ARN repository
+  secret.
 
 Parameters:
   GitHubRepository:
     Type: String
     Default: edwardmccormick/rememberdonnie
-    Description: owner/repo allowed to assume the deploy role.
+    Description: owner/repo allowed to assume the deploy role (legacy subject format).
+  GitHubImmutableRepository:
+    Type: String
+    Default: edwardmccormick@66527737/rememberdonnie@1453446766
+    Description: >-
+      owner@owner_id/repo@repo_id, the immutable subject format this repo emits
+      (see GET /repos/{owner}/{repo}/actions/oidc/customization/sub).
+  SiteStackName:
+    Type: String
+    Default: rememberdonnie
   DeployBranch:
     Type: String
     Default: main
@@ -55,12 +64,17 @@ Resources:
             Condition:
               StringEquals:
                 token.actions.githubusercontent.com:aud: sts.amazonaws.com
-                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubRepository}:ref:refs/heads/${DeployBranch}
+                token.actions.githubusercontent.com:sub:
+                  - !Sub repo:${GitHubImmutableRepository}:ref:refs/heads/${DeployBranch}
+                  - !Sub repo:${GitHubRepository}:ref:refs/heads/${DeployBranch}
       Policies:
         - PolicyName: PublishWebsite
           PolicyDocument:
             Version: 2012-10-17
             Statement:
+              - Effect: Allow
+                Action: cloudformation:DescribeStacks
+                Resource: !Sub arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${SiteStackName}/*
               - Effect: Allow
                 Action: s3:ListBucket
                 Resource: !Sub arn:aws:s3:::rememberdonnie-site-${AWS::AccountId}
@@ -84,5 +98,5 @@ Resources:
 
 Outputs:
   RoleArn:
-    Description: Set as the AWS_DEPLOY_ROLE_ARN repository variable.
+    Description: Store as the AWS_DEPLOY_ROLE_ARN repository secret.
     Value: !GetAtt WebsiteDeployRole.Arn
