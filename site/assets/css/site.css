@@ -1080,10 +1080,7 @@ h1, h2, h3 { margin: 0; font-weight: 600; }
   border: 0;
   background: none;
   cursor: zoom-in;
-  rotate: 2deg;
-  transition: rotate .6s var(--ease-out), scale .6s var(--ease-out);
 }
-.service__program-button:hover { rotate: 0deg; scale: 1.02; }
 .service__program-button img {
   width: 100%;
   border-radius: 4px;
