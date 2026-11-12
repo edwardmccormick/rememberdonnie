@@ -6,6 +6,7 @@
 // Each entry: { date: "YYYY-MM-DD", by: "donnie" | "<full name>", where: "#channel", text }.
 // "kind": "code" sets a commit message or code comment in monospace. Entries render in date order;
 // entries that share a date keep their order in the file.
+// "image": { src, width, height, alt } shows a photo; such an entry may leave text empty.
 // An entry with "hold": true stays out of the page. "review" is a note for people, not rendered.
 
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -30,7 +31,7 @@ function entry(item) {
   const meta = [his ? '' : `<span class="entry__by">${escape(item.by)}</span>`, item.where ? `<span>${escape(item.where)}</span>` : '',
     `<time datetime="${item.date}">${formatDate(item.date)}</time>`].filter(Boolean).join('');
   return `          <article class="entry ${his ? 'entry--his' : 'entry--theirs'}${item.kind === 'code' ? ' entry--code' : ''}">
-            <blockquote>${body(item.text)}</blockquote>
+${item.image ? `            <img class="entry__image" src="${escape(item.image.src)}" width="${item.image.width}" height="${item.image.height}" alt="${escape(item.image.alt)}" loading="lazy">\n` : ''}${item.text ? `            <blockquote>${body(item.text)}</blockquote>\n` : ''}
             <footer class="entry__meta">${meta}</footer>
           </article>`;
 }
@@ -38,7 +39,7 @@ function entry(item) {
 const items = JSON.parse(readFileSync(path('../words/words.json'), 'utf8')).filter((item) => !item.hold);
 items.sort((a, b) => a.date.localeCompare(b.date));
 for (const item of items) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(item.date) || !item.by || !item.text) throw new Error(`Bad entry: ${JSON.stringify(item)}`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(item.date) || !item.by || !(item.text || item.image)) throw new Error(`Bad entry: ${JSON.stringify(item)}`);
 }
 
 const groups = new Map();

@@ -6,7 +6,7 @@
 The page is paper, ink and one blue. Donnie's own words carry it.
 
 - **In his own words**: messages, commit messages and code comments that Donnie wrote, in date
-  order. Every entry is a quotation. Nobody rewrites one.
+  order, with what the people who knew him said. Every entry is a quotation. Nobody rewrites one.
 - **Memory wall**: anyone can share a story, with an optional photo.
 - **Light a candle**: a shared counter.
 - **A Celebration of Life**: the service details, the program and the Rest in Power mural.
@@ -123,7 +123,7 @@ that format as well as the classic `repo:owner/repo:…` one.
 
 - **His story**: the `#story` section of `site/index.html`. If the family shares an obituary or more
   about his life, this is where it goes.
-- **His words**: add an entry to `words/words.json` (`date`, `by`, `where`, `text`), run
+- **His words**: add an entry to `words/words.json` (`date`, `by`, `where`, `text`, and an optional `image`), run
   `node scripts/build-words.mjs`, and commit both files. Copy the text exactly, typos included. Get
   consent before you publish another person's words, a child's name or a customer's name. Set
   `"hold": true` to keep an entry off the page.

@@ -257,6 +257,7 @@ blockquote, figure { margin: 0; }
 .entry--code blockquote { font-family: var(--font-meta); font-size: clamp(.95rem, .9rem + .3vw, 1.1rem); line-height: 1.5; }
 .entry--theirs { padding-left: 1.2rem; border-left: 2px solid var(--blue); }
 .entry--theirs blockquote { color: var(--ink-soft); }
+.entry__image { width: min(100%, 26rem); margin-bottom: .2rem; border-radius: var(--radius); }
 .entry__meta {
   display: flex;
   flex-wrap: wrap;
